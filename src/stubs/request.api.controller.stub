@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Traits\ApiRequest;
+use \Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
+
+/**
+ * @class {{ Class }} request validator
+ */
+class {{ Class }} extends FormRequest
+{
+    use ApiRequest;
+
+    /**
+     * @var string $route_parameter
+     */
+    protected static string $route_parameter = '{{ parameter }}';
+
+    /**
+     * @private array $rules
+     * @return array
+     */
+    private function rulesList(): array
+    {
+        return [
+            'index' => [
+                'search'           => 'nullable|min:2',
+                'date_column'   => 'nullable|in:created_at,updated_at',
+                'date_from'     => 'required_if:date_column,!=,null|date',
+                'date_to'       => 'required_if:date_column,!=,null|date|after:date_from',
+                'order_column'  => 'nullable|required_if:order_type,!=,null|in:id,created_at,updated_at',
+                'order_type'    => 'nullable|required_if:order_column,!=,null|in:asc,desc',
+                'per_page'      => 'nullable|integer'
+            ],
+            'store' => [
+
+            ],
+            'update' => [
+                'id'   => 'required|exists:{{ table }}',
+            ],
+            'show' => [
+                'id' => 'required|exists:{{ table }},id,deleted_at,NULL',
+            ],
+            'destroy' => [
+                'id' => 'required|exists:{{ table }},id,deleted_at,NULL',
+            ],
+        ];
+    }
+
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function rules()
+    {
+        return $this->rulesList()[$this->route()->getActionMethod()];
+    }
+}

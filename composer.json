@@ -1,0 +1,15 @@
+{
+    "name": "usmon/microcore",
+    "description": "Main core for microservice",
+    "autoload": {
+        "psr-4": {
+            "Usmon\\Microcore\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Usmon"
+        }
+    ],
+    "require": {}
+}

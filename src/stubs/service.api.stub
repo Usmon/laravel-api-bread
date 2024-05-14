@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Services;
+
+use App\Repositories\{{ Repository }};
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @class {{ Class }}
+ */
+class {{ Class }}
+{
+    /**
+     * @var {{ Repository }}
+     */
+    protected {{ Repository }} $repository;
+
+    /**
+     * @param {{ Repository }} $repository
+     */
+    public function __construct( {{ Repository }} $repository )
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * @param array $filters
+     * @return array
+     */
+    public function getList(array $filters = [])
+    {
+        return $this->repository->getList($filters)->toArray();
+    }
+
+    /**
+     * @param int $key
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function getOne(int $key)
+    {
+        return $this->repository->getBy($key);
+    }
+
+    /**
+     * @param $values
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function store($values)
+    {
+        return $this->repository->create($values);
+    }
+
+    /**
+     * @param int $id
+     * @param array $values
+     * @return Model
+     */
+    public function update(int $id, array $values)
+    {
+        return $this->repository->update($id, $values);
+    }
+
+    /**
+     * @param int $id
+     * @return bool|mixed|null
+     */
+    public function delete(int $id)
+    {
+        return $this->repository->delete($id);
+    }
+
+}

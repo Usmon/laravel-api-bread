@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\{{ Model }};
+use Illuminate\Pagination\LengthAwarePaginator;
+
+/**
+ * @class {{ Class }}
+ */
+class {{ Class }}
+{
+    /**
+     * @var {{ Model }}
+     */
+    protected {{ Model }} $model;
+
+    /**
+     * Construct
+     *
+     * @param {{ Model }} $model
+     */
+    public function __construct( {{ Model }} $model )
+    {
+        $this->model = $model;
+    }
+
+    /**
+     * @param array $filters
+     * @return LengthAwarePaginator
+     */
+    public function getList(array $filters = []): LengthAwarePaginator
+    {
+        return $this->model->query()
+                            ->filter($filters)
+                            ->paginate($filters['per_page'] ?? null);
+    }
+
+    /**
+     * @param string $value
+     * @param string $column
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model|object|null
+     */
+    public function getBy(string $value, string $column = 'id')
+    {
+        return $this->model->query()
+                            ->where($column, '=', $value)
+                            ->first();
+    }
+
+    /**
+     * @param  array $values
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     */
+    public function create(array $values)
+    {
+        return $this->model->query()->create($values);
+    }
+
+    /**
+     * @param $id
+     * @param $values
+     * @return bool|int
+     */
+    public function update($id, $values)
+    {
+        $model = $this->getBy($id);
+        $model->update($values);
+
+        return $model->refresh();
+    }
+
+    /**
+     * @param int $id
+     * @return bool|mixed|null
+     */
+    public function delete(int $id)
+    {
+        return $this->getBy($id)
+                    ->delete();
+    }
+}

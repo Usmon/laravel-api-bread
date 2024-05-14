@@ -1,0 +1,49 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+
+/**
+ * @class {{ class }}
+ */
+class {{ class }} extends Model
+{
+    use HasFactory,
+        SoftDeletes;
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = [];
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'deleted_at'
+    ];
+
+    /**
+     * @var string[]
+     */
+    protected $casts = [];
+
+    /**
+     * @param Builder $query
+     * @param array $filters
+     * @return Builder
+     */
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return $query->when($filters['date_column'] ?? null, function(Builder $query) use ($filters) {
+            return $query->whereBetween($filters['date_column'], [$filters['date_from'], [$filters['date_to']]]);
+        })->when($filters['order_column'] ?? null, function(Builder $query) use ($filters) {
+            return $query->orderBy($filters['order_column'], $filters['order_type']);
+        });
+    }
+}
