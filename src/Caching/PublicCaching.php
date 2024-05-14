@@ -37,7 +37,7 @@ class PublicCaching
      */
     public static function set(string $key, string $id, array $attributes): bool
     {
-        return self::connection()->set(self::keyGenerate($key, $id), json_encode($attributes));
+        return (bool)self::connection()->set(self::keyGenerate($key, $id), json_encode($attributes));
     }
 
     /**
