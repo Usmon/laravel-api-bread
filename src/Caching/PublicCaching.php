@@ -43,6 +43,19 @@ class PublicCaching
     /**
      * @param string $key
      * @param string $id
+     * @param array $attributes
+     * @param int $lifetime
+     *
+     * @return bool
+     */
+    public static function setWithLifetime(string $key, string $id, array $attributes, int $lifetime): bool
+    {
+        return (bool)self::connection()->setex(self::keyGenerate($key, $id), $lifetime, json_encode($attributes));
+    }
+
+    /**
+     * @param string $key
+     * @param string $id
      * @return mixed
      */
     public static function get(string $key, string $id): mixed

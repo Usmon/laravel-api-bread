@@ -114,4 +114,28 @@ class ServiceClient implements ClientInterface
 
         return $request;
     }
+
+    /**
+     * @param string $cache_key
+     * @param string $identifier
+     * @param string $path
+     * @param string $method
+     * @param array $params
+     * @param int $lifetime
+     *
+     * @return mixed
+     */
+    public function requestWithCacheAndLifetime(string $cache_key, string $identifier, string $path, string $method, array $params, int $lifetime): mixed
+    {
+        $data = PublicCaching::get($cache_key, $identifier);
+        if ($data)
+            return $data;
+
+        $request = $this->request($path, $method, $params);
+        if ($request) {
+            PublicCaching::setWithLifetime($cache_key, $identifier, $request, $lifetime);
+        }
+
+        return $request;
+    }
 }

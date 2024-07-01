@@ -21,4 +21,15 @@ interface ClientInterface
      * @return mixed
      */
     public function requestWithCache(string $cache_key, string $identifier, string $path, string $method, array $params): mixed;
+
+    /**
+     * @param string $cache_key
+     * @param string $identifier
+     * @param string $path
+     * @param string $method
+     * @param array $params
+     * @param int $lifetime
+     * @return mixed
+     */
+    public function requestWithCacheAndLifetime(string $cache_key, string $identifier, string $path, string $method, array $params, int $lifetime): mixed;
 }
