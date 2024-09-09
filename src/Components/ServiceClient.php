@@ -29,7 +29,10 @@ class ServiceClient implements ClientInterface
      */
     public function __construct(string $domain)
     {
-        $this->client = new Client();
+        $this->client = new Client([
+                                       'timeout'         => env('TIMEOUT', 10),
+                                       'connect_timeout' => env('CONNECT_TIMEOUT', 3),
+                                   ]);
         $this->setDomain($domain);
     }
 
